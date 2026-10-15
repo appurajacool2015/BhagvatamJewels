@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F7F2E9;
+    color: #252321;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #252321;
+  }
+
+  .font-display {
+    font-family: 'Cinzel', serif;
+  }
+
+  /* Accessible WCAG 2.2 focus indicator */
+  :focus-visible {
+    outline: 2px solid #A9824B;
+    outline-offset: 2px;
+  }
+}
+
+/* Accessibility: Respect user reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Scrollbar for Luxury Aesthetics */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F2E9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D8C4A3;
+  border-radius: 9999px;
+  border: 1px solid rgba(169, 130, 75, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A9824B;
+}
+
+/* PRAO-Level Editorial Product Cards (Clean, High-Contrast, Ivory/White Backdrop) */
+.prao-card {
+  background: #FFFFFF;
+  border: 1px solid #E8DFD5;
+  box-shadow: 0 2px 10px -2px rgba(37, 35, 33, 0.04);
+}
+
+.prao-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prao-card-hover:hover {
+  border-color: #D8C4A3;
+  box-shadow: 0 10px 25px -5px rgba(37, 35, 33, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Elevated Editorial Containers */
+.prao-elevated {
+  background: #FFFFFF;
+  border: 1px solid #E2D7CB;
+  box-shadow: 0 12px 36px -8px rgba(37, 35, 33, 0.08);
+}
+
+/* Subtle Warm Antique Gold Text */
+.antique-gold-text {
+  color: #A9824B;
+}
+
+/* Fallback glass classes adapted for light ivory */
+.vault-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #E8DFD5;
+}
+
+.vault-glass-elevated {
+  background: #FFFFFF;
+  border: 1px solid #E2D7CB;
+  box-shadow: 0 16px 40px -10px rgba(37, 35, 33, 0.1);
+}
+
+.vault-glass-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vault-glass-hover:hover {
+  border-color: #D8C4A3;
+  box-shadow: 0 10px 25px -5px rgba(37, 35, 33, 0.08);
+}
+
+/* Gold Text Accent */
+.gold-text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #8F6C3A 0%,
+    #B59056 40%,
+    #A9824B 70%,
+    #8F6C3A 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
