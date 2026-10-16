@@ -3,7 +3,7 @@ import { Sparkles, Truck, ShieldCheck, RefreshCw, ArrowRight, CheckCircle2 } fro
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden py-10 sm:py-16 bg-[#F7F2E9] border-b border-[#E8DFD5]">
+    <section className="relative overflow-hidden py-8 sm:py-12 lg:py-14 bg-[#F7F2E9] border-b border-[#E8DFD5]">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -35,21 +35,14 @@ export default function Hero() {
               Authentic bridal and contemporary finish starting at just <span className="text-[#252321] font-bold">₹299</span>.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+            {/* Action Button: Single Primary Shopping CTA */}
+            <div className="pt-2">
               <a
                 href="#collections"
                 className="min-h-[48px] inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#252321] hover:bg-[#383532] text-[#F7F2E9] font-sans font-semibold text-xs tracking-wider uppercase shadow-md transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B]"
               >
-                <span>Shop Curated Pieces (From ₹299)</span>
+                <span>Shop Festive Collection (From ₹299)</span>
                 <ArrowRight className="w-4 h-4 text-[#D8C4A3]" />
-              </a>
-
-              <a
-                href="#set-builder"
-                className="min-h-[48px] inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-[#D8C4A3] bg-white hover:bg-[#EFE8DC] text-[#252321] font-sans text-xs tracking-wider uppercase transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-[#A9824B]"
-              >
-                <span>Build 3-Piece Festive Set (Save 25%)</span>
               </a>
             </div>
 
@@ -80,10 +73,14 @@ export default function Hero() {
             <div className="relative rounded-2xl overflow-hidden border border-[#E2D6C5] shadow-lg bg-white p-2">
               <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#EFE8DC]">
                 <img
-                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=85"
-                  alt="Bhagvatam Festive Curation Model"
+                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
+                  alt="Model wearing Bhagvatam Royal Rajasthani Kundan Choker Set"
+                  width="600"
+                  height="750"
                   className="w-full h-full object-cover object-top"
                   loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
                 />
                 
                 {/* Floating Micro-Badge */}

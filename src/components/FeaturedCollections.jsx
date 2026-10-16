@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import SmartDiscoveryBar from './SmartDiscoveryBar';
 import FilterDrawer from './FilterDrawer';
+import JewelryImage from './JewelryImage';
 import { STORE_CONFIG, getWhatsAppEnquiryUrl } from '../data/config';
 import {
   Sparkles,
@@ -296,21 +296,42 @@ export default function FeaturedCollections({
           </div>
         )}
 
-        {/* 3-Dimensional Smart Discovery Bar for quick on-page browsing */}
-        <SmartDiscoveryBar
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          selectedSubType={selectedSubType}
-          setSelectedSubType={setSelectedSubType}
-          selectedOutfit={selectedOutfit}
-          setSelectedOutfit={setSelectedOutfit}
-          priceFilter={priceFilter}
-          setPriceFilter={setPriceFilter}
-          inStockOnly={inStockOnly}
-          setInStockOnly={setInStockOnly}
-          matchingCount={sortedJewels.length}
-          onResetFilters={handleResetFilters}
-        />
+        {/* Shop-by-Category Pill Ribbon */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
+          {[
+            { id: 'All', label: 'All Jewels' },
+            { id: 'Necklaces', label: 'Necklaces & Chokers' },
+            { id: 'Earrings', label: 'Earrings & Jhumkas' },
+            { id: 'Bangles & Kadas', label: 'Bangles & Kadas' },
+            { id: 'Rings & Accessories', label: 'Rings & Accessories' },
+            { id: 'Under ₹499', label: 'Under ₹499 Drop', isHot: true }
+          ].map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setSelectedCategory(cat.id);
+                  setSelectedSubType('All');
+                }}
+                className={`min-h-[42px] px-4 py-2 rounded-full text-xs font-sans whitespace-nowrap transition-all flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#A9824B] ${
+                  isSelected
+                    ? 'bg-[#252321] text-white font-bold shadow-sm'
+                    : 'bg-white border border-[#E8DFD5] text-[#4D4945] hover:text-[#252321] hover:border-[#A9824B]/40'
+                }`}
+              >
+                <span>{cat.label}</span>
+                {cat.isHot && (
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${
+                    isSelected ? 'bg-[#A9824B] text-white' : 'bg-[#A9824B]/15 text-[#8F6C3A]'
+                  }`}>
+                    HOT
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
 
         {/* Full Filter Drawer Component */}
         <FilterDrawer
@@ -361,28 +382,32 @@ export default function FeaturedCollections({
               >
                 <div>
                   {/* Image Container: Clean Studio Ivory Background */}
-                  <div 
-                    className="relative aspect-square sm:aspect-[4/5] overflow-hidden bg-[#FDFBF7] cursor-pointer" 
+                  <div
+                    className="relative aspect-[4/5] overflow-hidden bg-[#FAF7F2] cursor-pointer"
                     onClick={() => handleOpenQuickView(jewel)}
                   >
-                    {/* Primary Image: Model Wearing the Jewelry */}
-                    <img
+                    {/* Primary Image: Model Wearing the Jewelry with Fallback */}
+                    <JewelryImage
                       src={jewel.modelImage}
                       alt={`${jewel.title} styled on model`}
-                      className={`w-full h-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0 ${
+                      aspectRatio="aspect-[4/5]"
+                      fallbackLabel={jewel.title}
+                      loading="lazy"
+                      className={`object-cover object-top transition-opacity duration-500 group-hover:opacity-0 ${
                         !isAvailable ? 'grayscale-[60%] opacity-60' : ''
                       }`}
-                      loading="lazy"
                     />
 
                     {/* Secondary Image: Macro Product Close-up on hover */}
                     <img
                       src={jewel.productImage || jewel.modelImage}
-                      alt={jewel.title}
+                      alt={`${jewel.title} product close-up`}
                       className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 opacity-0 group-hover:opacity-100 ${
                         !isAvailable ? 'grayscale-[60%] opacity-60' : ''
                       }`}
                       loading="lazy"
+                      decoding="async"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
 
                     {/* Truthful Merchandising Badges */}
@@ -532,10 +557,13 @@ export default function FeaturedCollections({
                 
                 {/* Active Image */}
                 <div className="relative aspect-square sm:aspect-auto sm:h-[460px] overflow-hidden">
-                  <img
+                  <JewelryImage
                     src={modalImageTab === 'model' ? quickViewItem.modelImage : (quickViewItem.productImage || quickViewItem.modelImage)}
                     alt={`${quickViewItem.title} ${modalImageTab === 'model' ? 'worn by model' : 'product view'}`}
-                    className="w-full h-full object-cover transition-all duration-300"
+                    aspectRatio="aspect-square sm:aspect-auto sm:h-[460px]"
+                    fallbackLabel={quickViewItem.title}
+                    loading="eager"
+                    className="object-cover transition-all duration-300"
                   />
                   
                   <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full border border-[#E8DFD5] text-[10px] font-sans tracking-wider uppercase text-[#252321] font-medium shadow-sm">

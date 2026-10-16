@@ -13,16 +13,7 @@ export default function Navbar({
   setSelectedCategory,
   onOpenAdmin
 }) {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const navCategories = [
     { label: 'All Jewels', value: 'All' },
@@ -43,14 +34,8 @@ export default function Navbar({
         </span>
       </div>
 
-      {/* 2. Main Header Bar (Ivory Canvas with Obsidian Branding) */}
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#F7F2E9]/98 backdrop-blur-xl border-b border-[#E2D6C5] shadow-sm py-2.5'
-            : 'bg-[#F7F2E9]/95 backdrop-blur-md border-b border-[#E8DFD5] py-3.5'
-        }`}
-      >
+      {/* 2. Main Header Bar (Ivory Canvas with Stable Obsidian & Gold Branding) */}
+      <header className="sticky top-0 z-40 bg-[#FAF7F2] border-b border-[#E8DFD5] shadow-xs py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Top Row: Logo (Left) | Search Bar (Center) | Actions (Right) */}
@@ -285,7 +270,7 @@ export default function Navbar({
                 className="w-full min-h-[48px] flex items-center justify-center gap-2 py-3 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-sans transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-sm"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
-                <span>WhatsApp Concierge (+91 98765 43210)</span>
+                <span>Customer Care & Order Tracking</span>
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SET_BUILDER_DATA } from '../data/jewelry';
 import { Sparkles, ShoppingBag, Check, ShieldCheck, ArrowRight, Tag } from 'lucide-react';
+import JewelryImage from './JewelryImage';
 
 export default function StyleSetBuilder({ onAddToCart }) {
   const [selectedNecklace, setSelectedNecklace] = useState(SET_BUILDER_DATA.necklaces[0]);
@@ -31,24 +32,21 @@ export default function StyleSetBuilder({ onAddToCart }) {
   };
 
   return (
-    <section id="set-builder" className="py-20 sm:py-28 relative bg-obsidian-950 overflow-hidden border-t border-gold-400/15">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-gold-600/10 rounded-full blur-[160px] pointer-events-none" />
-
+    <section id="set-builder" className="py-16 sm:py-24 relative bg-[#F7F2E9] overflow-hidden border-t border-[#E8DFD5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold-400/30 bg-obsidian-900 mb-3 shadow-gold-sm">
-            <Tag className="w-3.5 h-3.5 text-gold-300" />
-            <span className="text-[10px] tracking-widest uppercase font-sans text-gold-300 font-bold">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#D8C4A3] bg-white mb-3 shadow-xs">
+            <Tag className="w-3.5 h-3.5 text-[#A9824B]" />
+            <span className="text-[10px] tracking-widest uppercase font-sans text-[#8F6C3A] font-bold">
               Combo Offer &bull; Flat 25% Extra Discount
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-serif text-alabaster-50 tracking-tight mb-3">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-[#252321] tracking-tight mb-3">
             Festive Mix & Match Set Studio
           </h2>
-          <p className="text-alabaster-300 text-xs sm:text-sm font-light max-w-xl mx-auto leading-relaxed">
+          <p className="text-[#68625D] text-xs sm:text-sm font-light max-w-xl mx-auto leading-relaxed font-sans">
             Pair your favorite Choker, matching Jhumkas, and Statement Ring to create a complete festive look for under ₹999.
           </p>
         </div>
@@ -60,12 +58,12 @@ export default function StyleSetBuilder({ onAddToCart }) {
           <div className="lg:col-span-8 space-y-6">
             
             {/* Step 1: Chokers */}
-            <div className="vault-glass p-5 rounded-xl border border-gold-400/15">
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#E8DFD5] shadow-xs">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-xs font-sans font-bold tracking-wider uppercase text-gold-300">
+                <span className="text-xs font-sans font-bold tracking-wider uppercase text-[#8F6C3A]">
                   Step 1: Choose Your Choker / Necklace
                 </span>
-                <span className="text-xs text-alabaster-200 font-sans">₹{selectedNecklace.price}</span>
+                <span className="text-xs text-[#252321] font-sans font-semibold">₹{selectedNecklace.price}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {SET_BUILDER_DATA.necklaces.map((item) => {
@@ -74,16 +72,24 @@ export default function StyleSetBuilder({ onAddToCart }) {
                     <div
                       key={item.id}
                       onClick={() => setSelectedNecklace(item)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center ${
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedNecklace(item); }}
+                      className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none ${
                         isSelected
-                          ? 'border-gold-400 bg-gold-400/10 shadow-gold-sm'
-                          : 'border-white/10 bg-obsidian-850 hover:border-gold-400/40'
+                          ? 'border-[#A9824B] bg-[#FAF7F2] ring-2 ring-[#A9824B]/30 shadow-sm'
+                          : 'border-[#E8DFD5] bg-[#FAF7F2]/60 hover:bg-white hover:border-[#A9824B]/50'
                       }`}
                     >
-                      <img src={item.img} alt={item.name} className="w-14 h-14 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0" />
+                      <div className="w-14 h-14 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border border-[#E8DFD5]">
+                        <img src={item.img} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
+                      </div>
                       <div>
-                        <div className="text-xs font-sans text-alabaster-100 font-medium line-clamp-1">{item.name}</div>
-                        <div className="text-xs text-gold-300 font-bold mt-0.5">₹{item.price} <span className="line-through text-alabaster-500 font-normal text-[10px]">₹{item.mrp}</span></div>
+                        <div className="text-xs font-sans text-[#252321] font-medium line-clamp-1">{item.name}</div>
+                        <div className="text-xs text-[#8F6C3A] font-bold mt-0.5">
+                          ₹{item.price}{' '}
+                          <span className="line-through text-[#8A837C] font-normal text-[10px]">₹{item.mrp}</span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -92,12 +98,12 @@ export default function StyleSetBuilder({ onAddToCart }) {
             </div>
 
             {/* Step 2: Jhumkas */}
-            <div className="vault-glass p-5 rounded-xl border border-gold-400/15">
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#E8DFD5] shadow-xs">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-xs font-sans font-bold tracking-wider uppercase text-gold-300">
+                <span className="text-xs font-sans font-bold tracking-wider uppercase text-[#8F6C3A]">
                   Step 2: Choose Matching Jhumkas / Earrings
                 </span>
-                <span className="text-xs text-alabaster-200 font-sans">₹{selectedEarring.price}</span>
+                <span className="text-xs text-[#252321] font-sans font-semibold">₹{selectedEarring.price}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {SET_BUILDER_DATA.earrings.map((item) => {
@@ -106,16 +112,24 @@ export default function StyleSetBuilder({ onAddToCart }) {
                     <div
                       key={item.id}
                       onClick={() => setSelectedEarring(item)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center ${
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedEarring(item); }}
+                      className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none ${
                         isSelected
-                          ? 'border-gold-400 bg-gold-400/10 shadow-gold-sm'
-                          : 'border-white/10 bg-obsidian-850 hover:border-gold-400/40'
+                          ? 'border-[#A9824B] bg-[#FAF7F2] ring-2 ring-[#A9824B]/30 shadow-sm'
+                          : 'border-[#E8DFD5] bg-[#FAF7F2]/60 hover:bg-white hover:border-[#A9824B]/50'
                       }`}
                     >
-                      <img src={item.img} alt={item.name} className="w-14 h-14 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0" />
+                      <div className="w-14 h-14 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border border-[#E8DFD5]">
+                        <img src={item.img} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
+                      </div>
                       <div>
-                        <div className="text-xs font-sans text-alabaster-100 font-medium line-clamp-1">{item.name}</div>
-                        <div className="text-xs text-gold-300 font-bold mt-0.5">₹{item.price} <span className="line-through text-alabaster-500 font-normal text-[10px]">₹{item.mrp}</span></div>
+                        <div className="text-xs font-sans text-[#252321] font-medium line-clamp-1">{item.name}</div>
+                        <div className="text-xs text-[#8F6C3A] font-bold mt-0.5">
+                          ₹{item.price}{' '}
+                          <span className="line-through text-[#8A837C] font-normal text-[10px]">₹{item.mrp}</span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -124,12 +138,12 @@ export default function StyleSetBuilder({ onAddToCart }) {
             </div>
 
             {/* Step 3: Rings / Kadas */}
-            <div className="vault-glass p-5 rounded-xl border border-gold-400/15">
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#E8DFD5] shadow-xs">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-xs font-sans font-bold tracking-wider uppercase text-gold-300">
+                <span className="text-xs font-sans font-bold tracking-wider uppercase text-[#8F6C3A]">
                   Step 3: Choose Ring or Bangles
                 </span>
-                <span className="text-xs text-alabaster-200 font-sans">₹{selectedRing.price}</span>
+                <span className="text-xs text-[#252321] font-sans font-semibold">₹{selectedRing.price}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {SET_BUILDER_DATA.rings.map((item) => {
@@ -138,16 +152,24 @@ export default function StyleSetBuilder({ onAddToCart }) {
                     <div
                       key={item.id}
                       onClick={() => setSelectedRing(item)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center ${
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedRing(item); }}
+                      className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center sm:flex-col gap-3 text-left sm:text-center focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none ${
                         isSelected
-                          ? 'border-gold-400 bg-gold-400/10 shadow-gold-sm'
-                          : 'border-white/10 bg-obsidian-850 hover:border-gold-400/40'
+                          ? 'border-[#A9824B] bg-[#FAF7F2] ring-2 ring-[#A9824B]/30 shadow-sm'
+                          : 'border-[#E8DFD5] bg-[#FAF7F2]/60 hover:bg-white hover:border-[#A9824B]/50'
                       }`}
                     >
-                      <img src={item.img} alt={item.name} className="w-14 h-14 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0" />
+                      <div className="w-14 h-14 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden border border-[#E8DFD5]">
+                        <img src={item.img} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
+                      </div>
                       <div>
-                        <div className="text-xs font-sans text-alabaster-100 font-medium line-clamp-1">{item.name}</div>
-                        <div className="text-xs text-gold-300 font-bold mt-0.5">₹{item.price} <span className="line-through text-alabaster-500 font-normal text-[10px]">₹{item.mrp}</span></div>
+                        <div className="text-xs font-sans text-[#252321] font-medium line-clamp-1">{item.name}</div>
+                        <div className="text-xs text-[#8F6C3A] font-bold mt-0.5">
+                          ₹{item.price}{' '}
+                          <span className="line-through text-[#8A837C] font-normal text-[10px]">₹{item.mrp}</span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -158,59 +180,60 @@ export default function StyleSetBuilder({ onAddToCart }) {
           </div>
 
           {/* RIGHT: Live Combo Deal Summary Card */}
-          <div className="lg:col-span-4 vault-glass-elevated rounded-2xl p-6 border border-gold-400/30 sticky top-28">
-            <div className="inline-block px-3 py-1 rounded bg-gold-400/10 border border-gold-400/30 text-gold-300 text-[10px] uppercase font-sans tracking-widest font-bold mb-4">
+          <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-[#E8DFD5] shadow-md sticky top-24 text-[#252321]">
+            <div className="inline-block px-3 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-[#8F6C3A] text-[10px] uppercase font-sans tracking-widest font-bold mb-4">
               Your Complete 3-Piece Look
             </div>
 
             {/* Model Wearing Preview */}
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-obsidian-950 mb-4 border border-white/10">
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#EFE8DC] mb-4 border border-[#E8DFD5]">
               <img
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
-                alt="Model wearing festive set"
+                alt="Model wearing curated festive jewellery set"
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950/80 via-transparent to-transparent" />
-              <div className="absolute bottom-3 left-3 text-xs font-serif text-gold-200">
-                Styled Look: Royal Festive Grace
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 text-xs font-serif text-white font-medium">
+                Curated Look: Royal Festive Grace
               </div>
             </div>
 
             {/* Selected Items Breakdown */}
-            <div className="space-y-2 text-xs font-sans text-alabaster-300 pb-4 border-b border-white/10">
+            <div className="space-y-2 text-xs font-sans text-[#4D4945] pb-4 border-b border-[#E8DFD5]">
               <div className="flex justify-between">
                 <span className="truncate pr-2">1. {selectedNecklace.name}</span>
-                <span className="text-alabaster-100 font-medium">₹{selectedNecklace.price}</span>
+                <span className="text-[#252321] font-medium shrink-0">₹{selectedNecklace.price}</span>
               </div>
               <div className="flex justify-between">
                 <span className="truncate pr-2">2. {selectedEarring.name}</span>
-                <span className="text-alabaster-100 font-medium">₹{selectedEarring.price}</span>
+                <span className="text-[#252321] font-medium shrink-0">₹{selectedEarring.price}</span>
               </div>
               <div className="flex justify-between">
                 <span className="truncate pr-2">3. {selectedRing.name}</span>
-                <span className="text-alabaster-100 font-medium">₹{selectedRing.price}</span>
+                <span className="text-[#252321] font-medium shrink-0">₹{selectedRing.price}</span>
               </div>
             </div>
 
             {/* Price Calculations */}
             <div className="py-4 space-y-1.5 text-xs font-sans">
-              <div className="flex justify-between text-alabaster-400">
+              <div className="flex justify-between text-[#8A837C]">
                 <span>Total MRP:</span>
                 <span className="line-through">₹{totalMrp}</span>
               </div>
-              <div className="flex justify-between text-alabaster-400">
+              <div className="flex justify-between text-[#4D4945]">
                 <span>Individual Price:</span>
                 <span>₹{totalIndividualPrice}</span>
               </div>
-              <div className="flex justify-between text-emerald-400 font-medium">
+              <div className="flex justify-between text-emerald-800 font-semibold">
                 <span>25% Combo Deal Discount:</span>
                 <span>-₹{comboDiscount}</span>
               </div>
-              <div className="flex justify-between items-baseline pt-2 border-t border-white/10">
-                <span className="text-xs uppercase tracking-wider text-alabaster-100 font-bold">Bundle Price:</span>
+              <div className="flex justify-between items-baseline pt-2 border-t border-[#E8DFD5]">
+                <span className="text-xs uppercase tracking-wider text-[#252321] font-bold">Bundle Price:</span>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-gold-300 font-sans">₹{finalBundlePrice}</span>
-                  <div className="text-[10px] text-emerald-400 font-medium">You Save ₹{totalMrp - finalBundlePrice} Overall!</div>
+                  <span className="text-2xl font-bold text-[#8F6C3A] font-serif">₹{finalBundlePrice}</span>
+                  <div className="text-[10px] text-emerald-800 font-medium">You Save ₹{totalMrp - finalBundlePrice} Overall!</div>
                 </div>
               </div>
             </div>
@@ -218,13 +241,13 @@ export default function StyleSetBuilder({ onAddToCart }) {
             {/* Buy Combo Button */}
             <button
               onClick={handleAddBundleToCart}
-              className="w-full py-3.5 rounded-full bg-gradient-to-r from-gold-400 via-gold-300 to-gold-500 text-obsidian-950 font-sans font-bold text-xs tracking-wider uppercase hover:shadow-gold-glow transition-all shadow-xl"
+              className="w-full min-h-[48px] py-3.5 px-4 rounded-full bg-[#252321] hover:bg-[#3D3A37] text-white font-sans font-bold text-xs tracking-wider uppercase shadow-md transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none active:scale-[0.98]"
             >
-              Buy 3-Piece Combo (₹{finalBundlePrice})
+              Add 3-Piece Festive Set to Bag (₹{finalBundlePrice})
             </button>
 
-            <div className="flex items-center justify-center gap-2 text-[10px] text-alabaster-400 mt-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-gold-400" />
+            <div className="flex items-center justify-center gap-2 text-[10px] text-[#68625D] mt-3 font-sans">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#A9824B]" />
               <span>Includes Free Cash on Delivery & Free Gift Box</span>
             </div>
           </div>

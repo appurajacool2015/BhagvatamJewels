@@ -44,7 +44,7 @@ export const DEFAULT_PRODUCTS = [
     stones: 'Pure Herringbone Polish',
     closure: 'Lobster Claw with 5cm Extension',
     productImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=85',
-    modelImage: 'https://images.unsplash.com/photo-1620656798579-1984d9e87dfa?auto=format&fit=crop&w=1000&q=85',
+    modelImage: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1000&q=85',
     description: 'Our top-rated waterproof chain. You can wear it in the shower, gym, or pool with zero color fading or blackening. Silky smooth against skin.',
     features: ['Lifetime Color Guarantee', 'Sweat & Perfume Proof', 'Hypoallergenic', 'Tarnish-Free']
   },
@@ -68,7 +68,7 @@ export const DEFAULT_PRODUCTS = [
     stones: 'Faceted Afghan Mirrors & Silver Charms',
     closure: 'Thread Tie-Up',
     productImage: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=1000&q=85',
-    modelImage: 'https://images.unsplash.com/photo-1543290900-726c036526d8?auto=format&fit=crop&w=1000&q=85',
+    modelImage: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=85',
     description: 'Authentic Banjara-inspired oxidised silver necklace adorned with reflective real mirrors and musical bell drops. Perfect for Navratri, cotton sarees, and kurtis.',
     features: ['Vintage Antique Finish', 'Non-Allergic Metal', 'Looks Like Real Silver', 'Free Shipping']
   },
@@ -270,7 +270,7 @@ export const SET_BUILDER_DATA = {
   earrings: [
     { id: 'e1', name: 'Matching Meenakari Jhumkas', price: 349, mrp: 899, img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80' },
     { id: 'e2', name: 'Temple Laxmi Drop Earrings', price: 299, mrp: 749, img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80' },
-    { id: 'e3', name: 'Oxidised Mirror Studs', price: 249, mrp: 599, img: 'https://images.unsplash.com/photo-1543290900-726c036526d8?auto=format&fit=crop&w=600&q=80' }
+    { id: 'e3', name: 'Oxidised Mirror Studs', price: 249, mrp: 599, img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80' }
   ],
   rings: [
     { id: 'r1', name: 'Floral Adjustable Cocktail Ring', price: 249, mrp: 699, img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80' },
