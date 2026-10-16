@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { X, Trash2, Truck, ShieldCheck, Tag, ArrowRight, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Trash2, Truck, ShieldCheck, Tag, ArrowRight, Check, MessageCircle } from 'lucide-react';
+import { STORE_CONFIG, getWhatsAppCartEnquiryUrl } from '../data/config';
 
 export default function CartDrawer({ isOpen, onClose, cart, onRemoveFromCart, onClearCart }) {
   const [couponCode, setCouponCode] = useState('BHAGVATAM10');
@@ -7,12 +8,29 @@ export default function CartDrawer({ isOpen, onClose, cart, onRemoveFromCart, on
   const [orderComplete, setOrderComplete] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cod'); // 'cod' | 'upi'
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
   const discountAmount = discountApplied ? Math.round(subtotal * 0.10) : 0;
   const shippingFee = subtotal >= 499 ? 0 : 70;
   const finalTotal = subtotal - discountAmount + shippingFee;
+  const cartWhatsAppUrl = getWhatsAppCartEnquiryUrl(cart, finalTotal);
 
   const handleCheckout = () => {
     setOrderComplete(true);
@@ -206,6 +224,19 @@ export default function CartDrawer({ isOpen, onClose, cart, onRemoveFromCart, on
               >
                 <span>Confirm Order ({paymentMethod === 'cod' ? 'Cash on Delivery' : 'Pay Online'})</span>
               </button>
+
+              {/* Discreet WhatsApp Availability Enquiry for Cart */}
+              {cartWhatsAppUrl && (
+                <a
+                  href={cartWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full text-center py-1 text-xs text-emerald-800 hover:text-emerald-950 font-sans font-medium flex items-center justify-center gap-1.5 transition-colors pt-1 focus-visible:ring-2 focus-visible:ring-emerald-500 rounded"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Questions about delivery? Ask on WhatsApp</span>
+                </a>
+              )}
             </div>
           )}
 

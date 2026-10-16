@@ -1,6 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SmartDiscoveryBar from './SmartDiscoveryBar';
-import { Sparkles, Heart, Eye, ShoppingBag, Check, ShieldCheck, Truck, Star, BellRing, Flame } from 'lucide-react';
+import FilterDrawer from './FilterDrawer';
+import { STORE_CONFIG, getWhatsAppEnquiryUrl } from '../data/config';
+import {
+  Sparkles,
+  Heart,
+  Eye,
+  ShoppingBag,
+  Check,
+  ShieldCheck,
+  Truck,
+  Star,
+  BellRing,
+  Flame,
+  SlidersHorizontal,
+  X,
+  MessageCircle
+} from 'lucide-react';
 
 export default function FeaturedCollections({
   products,
@@ -13,14 +29,32 @@ export default function FeaturedCollections({
 }) {
   const [selectedSubType, setSelectedSubType] = useState('All');
   const [selectedOutfit, setSelectedOutfit] = useState('All');
+  const [selectedOccasion, setSelectedOccasion] = useState('All');
   const [priceFilter, setPriceFilter] = useState('All');
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'price-low' | 'price-high' | 'rating'
   const [quickViewItem, setQuickViewItem] = useState(null);
   const [modalImageTab, setModalImageTab] = useState('model'); // 'model' | 'product'
 
-  // Filter products across all 5 dimensions
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && quickViewItem) {
+        setQuickViewItem(null);
+      }
+    };
+    if (quickViewItem) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [quickViewItem]);
+
+  // Filter products across all 6 dimensions
   const filteredJewels = products.filter((jewel) => {
     // 1. Category
     if (selectedCategory !== 'All' && selectedCategory !== 'Under ₹499') {
@@ -39,22 +73,31 @@ export default function FeaturedCollections({
       }
     }
 
-    // 4. Price Filter
+    // 4. Occasion
+    if (selectedOccasion !== 'All') {
+      if (!jewel.occasion || !jewel.occasion.toLowerCase().includes(selectedOccasion.toLowerCase())) {
+        return false;
+      }
+    }
+
+    // 5. Price Filter
     if (selectedCategory === 'Under ₹499' || priceFilter === 'under499') {
       if (jewel.price > 499) return false;
     } else if (priceFilter === '500to999') {
       if (jewel.price < 500 || jewel.price > 999) return false;
-    } else if (priceFilter === 'above1000') {
-      if (jewel.price < 1000) return false;
+    } else if (priceFilter === '1000to1999' || priceFilter === 'above1000') {
+      if (jewel.price < 1000 || jewel.price > 1999) return false;
+    } else if (priceFilter === 'above2000') {
+      if (jewel.price < 2000) return false;
     }
 
-    // 5. In-Stock Only
+    // 6. In-Stock Only
     const isAvailable = jewel.inStock && (jewel.stockQuantity === undefined || jewel.stockQuantity > 0);
     if (inStockOnly && !isAvailable) {
       return false;
     }
 
-    // 6. Search Query
+    // 7. Search Query
     if (searchQuery && searchQuery.trim() !== '') {
       const q = searchQuery.toLowerCase().trim();
       const matchSearch = (
@@ -82,9 +125,21 @@ export default function FeaturedCollections({
     setSelectedCategory('All');
     setSelectedSubType('All');
     setSelectedOutfit('All');
+    setSelectedOccasion('All');
     setPriceFilter('All');
     setInStockOnly(false);
   };
+
+  const activeFiltersCount = [
+    selectedCategory !== 'All',
+    selectedSubType !== 'All',
+    selectedOutfit !== 'All',
+    selectedOccasion !== 'All',
+    priceFilter !== 'All',
+    inStockOnly
+  ].filter(Boolean).length;
+
+  const hasActiveFilters = activeFiltersCount > 0;
 
   const handleOpenQuickView = (jewel) => {
     setQuickViewItem(jewel);
@@ -95,8 +150,8 @@ export default function FeaturedCollections({
     <section id="collections" className="py-12 sm:py-20 relative bg-[#F7F2E9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Collection Heading & Sort Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-4 border-b border-[#E8DFD5]">
+        {/* Collection Heading & Controls Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-[#E8DFD5]">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D8C4A3] bg-white mb-2 shadow-xs">
               <Sparkles className="w-3 h-3 text-[#A9824B]" />
@@ -112,31 +167,136 @@ export default function FeaturedCollections({
             </p>
           </div>
 
-          {/* Sort By Dropdown & Count */}
-          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-            <span className="text-xs font-sans text-[#68625D]">
-              <strong className="text-[#252321]">{sortedJewels.length}</strong> items
-            </span>
-            <div className="flex items-center gap-2">
-              <label htmlFor="sort-select" className="text-xs font-sans text-[#68625D] hidden sm:inline">
+          {/* Action Buttons: Filter Drawer Trigger + Sort By Dropdown */}
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
+            {/* Filter Drawer Trigger Button */}
+            <button
+              onClick={() => setIsFilterDrawerOpen(true)}
+              className="min-h-[42px] px-3.5 sm:px-4 py-2 rounded-xl border border-[#D8C4A3] bg-white text-xs font-sans text-[#252321] hover:bg-[#FAF7F2] active:scale-[0.98] flex items-center gap-2 shadow-xs transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B]"
+              aria-label={`Open filter drawer (${activeFiltersCount} active)`}
+            >
+              <SlidersHorizontal className="w-4 h-4 text-[#A9824B]" />
+              <span className="font-medium">Filter</span>
+              {activeFiltersCount > 0 && (
+                <span className="w-5 h-5 rounded-full bg-[#252321] text-white text-[10px] font-bold flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+
+            {/* Sort Select */}
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="sort-select" className="text-xs font-sans text-[#68625D] hidden md:inline">
                 Sort by:
               </label>
               <select
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="min-h-[40px] px-3 py-1.5 rounded-lg border border-[#D8C4A3] bg-white text-xs font-sans text-[#252321] focus:outline-none focus:border-[#A9824B] focus:ring-1 focus:ring-[#A9824B] shadow-xs"
+                className="min-h-[42px] px-3 py-2 rounded-xl border border-[#D8C4A3] bg-white text-xs font-sans text-[#252321] focus:outline-none focus:border-[#A9824B] focus:ring-1 focus:ring-[#A9824B] shadow-xs"
               >
                 <option value="featured">Featured Collection</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-                <option value="rating">Highest Customer Rated</option>
+                <option value="rating">Highest Rated</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* 3-Dimensional Smart Discovery Bar */}
+        {/* Removable Active Filter Chips Bar */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 mb-6 p-3 rounded-xl bg-white border border-[#E8DFD5] shadow-xs">
+            <span className="text-xs font-sans text-[#78716C] mr-1">Active:</span>
+
+            {selectedCategory !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
+                <span>Type: {selectedCategory}</span>
+                <button
+                  onClick={() => setSelectedCategory('All')}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label={`Remove ${selectedCategory} filter`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {selectedSubType !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
+                <span>Style: {selectedSubType}</span>
+                <button
+                  onClick={() => setSelectedSubType('All')}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label={`Remove ${selectedSubType} filter`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {selectedOutfit !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
+                <span>Color: {selectedOutfit}</span>
+                <button
+                  onClick={() => setSelectedOutfit('All')}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label={`Remove ${selectedOutfit} color filter`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {selectedOccasion !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
+                <span>Occasion: {selectedOccasion}</span>
+                <button
+                  onClick={() => setSelectedOccasion('All')}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label={`Remove ${selectedOccasion} occasion filter`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {priceFilter !== 'All' && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
+                <span>Price: {priceFilter === 'under499' ? 'Under ₹499' : priceFilter === '500to999' ? '₹500-₹999' : priceFilter === '1000to1999' ? '₹1,000-₹1,999' : '₹2,000+'}</span>
+                <button
+                  onClick={() => setPriceFilter('All')}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label="Remove price filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {inStockOnly && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-sans text-emerald-900">
+                <span>Listed: In Stock</span>
+                <button
+                  onClick={() => setInStockOnly(false)}
+                  className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
+                  aria-label="Remove in stock only filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            <button
+              onClick={handleResetFilters}
+              className="text-xs font-sans text-[#8F6C3A] hover:text-[#252321] underline ml-auto py-1 px-2 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded"
+            >
+              Reset All
+            </button>
+          </div>
+        )}
+
+        {/* 3-Dimensional Smart Discovery Bar for quick on-page browsing */}
         <SmartDiscoveryBar
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -150,6 +310,25 @@ export default function FeaturedCollections({
           setInStockOnly={setInStockOnly}
           matchingCount={sortedJewels.length}
           onResetFilters={handleResetFilters}
+        />
+
+        {/* Full Filter Drawer Component */}
+        <FilterDrawer
+          isOpen={isFilterDrawerOpen}
+          onClose={() => setIsFilterDrawerOpen(false)}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          selectedSubType={selectedSubType}
+          setSelectedSubType={setSelectedSubType}
+          selectedOutfit={selectedOutfit}
+          setSelectedOutfit={setSelectedOutfit}
+          selectedOccasion={selectedOccasion}
+          setSelectedOccasion={setSelectedOccasion}
+          priceFilter={priceFilter}
+          setPriceFilter={setPriceFilter}
+          inStockOnly={inStockOnly}
+          setInStockOnly={setInStockOnly}
+          totalMatching={sortedJewels.length}
         />
 
         {/* Empty State */}
@@ -174,7 +353,6 @@ export default function FeaturedCollections({
           {sortedJewels.map((jewel) => {
             const isWishlisted = wishlist.includes(jewel.id);
             const isAvailable = jewel.inStock && (jewel.stockQuantity === undefined || jewel.stockQuantity > 0);
-            const isLowStock = isAvailable && jewel.stockQuantity > 0 && jewel.stockQuantity <= 3;
 
             return (
               <div
@@ -207,19 +385,13 @@ export default function FeaturedCollections({
                       loading="lazy"
                     />
 
-                    {/* Verified Merchandising Badges */}
+                    {/* Truthful Merchandising Badges */}
                     <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 flex flex-col gap-1 z-10">
                       {isAvailable ? (
                         <>
-                          {isLowStock ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-sans tracking-wide uppercase bg-[#FDF3E7] text-[#8F6C3A] border border-[#E8DFD5] font-bold shadow-xs">
-                              {jewel.stockQuantity} Left
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-sans tracking-wider uppercase bg-white/95 text-[#252321] border border-[#E8DFD5] font-medium shadow-xs">
-                              {jewel.badge || 'Curated'}
-                            </span>
-                          )}
+                          <span className="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-sans tracking-wider uppercase bg-white/95 text-[#252321] border border-[#E8DFD5] font-medium shadow-xs">
+                            {jewel.badge || 'Curated'}
+                          </span>
                           {jewel.discount && (
                             <span className="px-2 py-0.5 rounded text-[8px] sm:text-[9px] tracking-wider uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold w-fit">
                               {jewel.discount}
@@ -405,7 +577,7 @@ export default function FeaturedCollections({
                     </span>
                     {quickViewItem.inStock ? (
                       <span className="px-2.5 py-0.5 rounded text-[9px] font-sans tracking-wider uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">
-                        In Stock ({quickViewItem.stockQuantity || 10} Units)
+                        Listed Item (Supplier Checked on Order)
                       </span>
                     ) : (
                       <span className="px-2.5 py-0.5 rounded text-[9px] font-sans tracking-wider uppercase bg-red-50 text-red-800 border border-red-200 font-bold">
@@ -510,7 +682,32 @@ export default function FeaturedCollections({
                     </button>
                   )}
 
-                  <div className="flex items-center justify-center gap-4 text-[10px] text-[#78716C] pt-1">
+                  {/* Discreet WhatsApp Availability Enquiry Action */}
+                  <div className="pt-2">
+                    {quickViewItem && getWhatsAppEnquiryUrl(quickViewItem) ? (
+                      <a
+                        href={getWhatsAppEnquiryUrl(quickViewItem)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full min-h-[44px] py-2.5 px-4 rounded-full border border-emerald-600/30 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs font-sans font-medium flex items-center justify-center gap-2 transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500"
+                        aria-label={`Enquire on WhatsApp about ${quickViewItem.title}`}
+                      >
+                        <MessageCircle className="w-4 h-4 text-emerald-700" />
+                        <span>Enquire Availability via WhatsApp</span>
+                      </a>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full min-h-[42px] py-2 px-3 rounded-full bg-[#F5EFE6] border border-[#E8DFD5] text-[11px] text-[#8C827A] font-sans flex items-center justify-center gap-1.5 cursor-not-allowed"
+                        title="WhatsApp enquiry is disabled until a verified business number is configured in settings."
+                      >
+                        <MessageCircle className="w-3.5 h-3.5 text-[#8C827A]" />
+                        <span>WhatsApp Enquiry (Business Number Verification Pending)</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-center gap-4 text-[10px] text-[#78716C] pt-2">
                     <span className="flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5 text-[#A9824B]" />
                       Anti-Tarnish
