@@ -11,7 +11,8 @@ export default function Navbar({
   setSearchQuery,
   selectedCategory,
   setSelectedCategory,
-  onOpenAdmin
+  onOpenAdmin,
+  onNavigateHome
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -20,6 +21,7 @@ export default function Navbar({
     { label: 'Necklaces & Sets', value: 'Necklaces' },
     { label: 'Earrings & Jhumkas', value: 'Earrings' },
     { label: 'Bangles & Kadas', value: 'Bangles & Kadas' },
+    { label: 'Laddu Gopal Jewels', value: 'Laddu Gopal Jewels' },
     { label: 'Rings & Accessories', value: 'Rings & Accessories' },
     { label: 'Under ₹499', value: 'Under ₹499', isHot: true },
     { label: 'Festive Combos (Save 25%)', href: '#set-builder', isSpecial: true },
@@ -45,6 +47,7 @@ export default function Navbar({
             <div 
               className="flex items-center gap-3 cursor-pointer select-none shrink-0" 
               onClick={() => {
+                if (onNavigateHome) onNavigateHome();
                 setSelectedCategory('All');
                 setSearchQuery('');
                 window.scrollTo({ top: 0, behavior: 'smooth' });

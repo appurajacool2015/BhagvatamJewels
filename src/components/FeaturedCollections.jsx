@@ -15,7 +15,9 @@ import {
   Flame,
   SlidersHorizontal,
   X,
-  MessageCircle
+  MessageCircle,
+  ArrowLeft,
+  ArrowUpDown
 } from 'lucide-react';
 
 export default function FeaturedCollections({
@@ -25,7 +27,10 @@ export default function FeaturedCollections({
   wishlist,
   selectedCategory,
   setSelectedCategory,
-  searchQuery
+  searchQuery,
+  onSelectProduct,
+  isStandalonePage = false,
+  onBackToHome
 }) {
   const [selectedSubType, setSelectedSubType] = useState('All');
   const [selectedOutfit, setSelectedOutfit] = useState('All');
@@ -80,15 +85,11 @@ export default function FeaturedCollections({
       }
     }
 
-    // 5. Price Filter
+    // 5. Price Filter (Strict ₹999 maximum store ceiling)
     if (selectedCategory === 'Under ₹499' || priceFilter === 'under499') {
       if (jewel.price > 499) return false;
     } else if (priceFilter === '500to999') {
       if (jewel.price < 500 || jewel.price > 999) return false;
-    } else if (priceFilter === '1000to1999' || priceFilter === 'above1000') {
-      if (jewel.price < 1000 || jewel.price > 1999) return false;
-    } else if (priceFilter === 'above2000') {
-      if (jewel.price < 2000) return false;
     }
 
     // 6. In-Stock Only
@@ -141,66 +142,76 @@ export default function FeaturedCollections({
 
   const hasActiveFilters = activeFiltersCount > 0;
 
-  const handleOpenQuickView = (jewel) => {
-    setQuickViewItem(jewel);
-    setModalImageTab('model');
+  const handleProductClick = (jewel) => {
+    if (onSelectProduct) {
+      onSelectProduct(jewel);
+    } else {
+      handleOpenQuickView(jewel);
+    }
   };
 
   return (
-    <section id="collections" className="py-12 sm:py-20 relative bg-[#F7F2E9]">
+    <section id="collections" className="py-8 sm:py-16 relative bg-[#F7F2E9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Collection Heading & Controls Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-[#E8DFD5]">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D8C4A3] bg-white mb-2 shadow-xs">
-              <Sparkles className="w-3 h-3 text-[#A9824B]" />
-              <span className="text-[10px] tracking-widest uppercase font-sans text-[#8F6C3A] font-semibold">
-                Bhagvatam Curation
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-serif text-[#252321] tracking-tight">
-              Curated Jewellery Collection
-            </h2>
-            <p className="text-xs sm:text-sm text-[#68625D] font-light mt-1">
-              Thoughtfully curated everyday, festive, and bridal jewellery with durable anti-tarnish finish.
-            </p>
-          </div>
-
-          {/* Action Buttons: Filter Drawer Trigger + Sort By Dropdown */}
-          <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
-            {/* Filter Drawer Trigger Button */}
+        {/* Standalone Collection Navigation Header */}
+        {isStandalonePage && (
+          <div className="mb-4 flex items-center justify-between">
             <button
-              onClick={() => setIsFilterDrawerOpen(true)}
-              className="min-h-[42px] px-3.5 sm:px-4 py-2 rounded-xl border border-[#D8C4A3] bg-white text-xs font-sans text-[#252321] hover:bg-[#FAF7F2] active:scale-[0.98] flex items-center gap-2 shadow-xs transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B]"
-              aria-label={`Open filter drawer (${activeFiltersCount} active)`}
+              onClick={onBackToHome}
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E8DFD5] text-xs font-sans font-medium text-[#252321] hover:bg-[#FAF7F2] transition-colors focus-visible:ring-2 focus-visible:ring-[#A9824B] shadow-xs"
             >
-              <SlidersHorizontal className="w-4 h-4 text-[#A9824B]" />
-              <span className="font-medium">Filter</span>
-              {activeFiltersCount > 0 && (
-                <span className="w-5 h-5 rounded-full bg-[#252321] text-white text-[10px] font-bold flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
+              <ArrowLeft className="w-4 h-4 text-[#252321]" />
+              <span>Back to Home</span>
             </button>
+            <span className="text-[11px] font-sans text-[#78716C] font-medium">
+              FREE Shipping On ₹499+ Order ✨
+            </span>
+          </div>
+        )}
 
-            {/* Sort Select */}
-            <div className="flex items-center gap-1.5">
-              <label htmlFor="sort-select" className="text-xs font-sans text-[#68625D] hidden md:inline">
-                Sort by:
-              </label>
-              <select
-                id="sort-select"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="min-h-[42px] px-3 py-2 rounded-xl border border-[#D8C4A3] bg-white text-xs font-sans text-[#252321] focus:outline-none focus:border-[#A9824B] focus:ring-1 focus:ring-[#A9824B] shadow-xs"
-              >
-                <option value="featured">Featured Collection</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Highest Rated</option>
-              </select>
-            </div>
+        {/* Collection Heading (Matches PRAO Sample Screen 2) */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl sm:text-4xl font-serif text-[#252321] tracking-tight font-medium uppercase">
+            {selectedCategory === 'All' ? 'NEW ARRIVALS ✨' : `${selectedCategory} ✨`}
+          </h1>
+          <p className="text-xs sm:text-sm text-[#68625D] font-light mt-1 max-w-lg mx-auto">
+            {selectedCategory === 'All'
+              ? 'Explore our complete festive & daily collection with anti-tarnish polish, starting at just ₹199.'
+              : `Handcrafted ${selectedCategory} with authentic premium polish, all strictly under ₹999.`}
+          </p>
+        </div>
+
+        {/* PRAO-Style 50/50 Split Control Bar (Matches Screenshot 2) */}
+        <div className="grid grid-cols-2 bg-white border border-[#E8DFD5] rounded-xl overflow-hidden mb-6 shadow-xs divide-x divide-[#E8DFD5]">
+          <button
+            onClick={() => setIsFilterDrawerOpen(true)}
+            className="min-h-[46px] px-3 flex items-center justify-center gap-2 text-xs font-sans text-[#252321] hover:bg-[#FAF7F2] active:bg-[#F2ECE0] transition-colors focus-visible:ring-2 focus-visible:ring-[#A9824B]"
+            aria-label={`Open filter drawer (${activeFiltersCount} active)`}
+          >
+            <SlidersHorizontal className="w-4 h-4 text-[#A9824B]" />
+            <span className="font-semibold">Filter</span>
+            <span className="text-[#78716C]">({sortedJewels.length} Results)</span>
+            {activeFiltersCount > 0 && (
+              <span className="w-4 h-4 rounded-full bg-[#252321] text-white text-[9px] font-bold flex items-center justify-center">
+                {activeFiltersCount}
+              </span>
+            )}
+          </button>
+
+          <div className="relative flex items-center justify-center">
+            <ArrowUpDown className="w-4 h-4 text-[#A9824B] absolute left-3 pointer-events-none" />
+            <select
+              id="sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="w-full min-h-[46px] pl-9 pr-3 text-xs font-sans text-[#252321] bg-transparent text-center focus:outline-none cursor-pointer"
+            >
+              <option value="featured">Newest ✨</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+            </select>
           </div>
         </div>
 
@@ -263,7 +274,7 @@ export default function FeaturedCollections({
 
             {priceFilter !== 'All' && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8C4A3] text-xs font-sans text-[#252321]">
-                <span>Price: {priceFilter === 'under499' ? 'Under ₹499' : priceFilter === '500to999' ? '₹500-₹999' : priceFilter === '1000to1999' ? '₹1,000-₹1,999' : '₹2,000+'}</span>
+                <span>Price: {priceFilter === 'under499' ? 'Under ₹499' : '₹500 – ₹999'}</span>
                 <button
                   onClick={() => setPriceFilter('All')}
                   className="hover:text-red-600 focus-visible:ring-1 focus-visible:ring-[#A9824B] rounded p-0.5"
@@ -314,7 +325,7 @@ export default function FeaturedCollections({
                   setSelectedCategory(cat.id);
                   setSelectedSubType('All');
                 }}
-                className={`min-h-[42px] px-4 py-2 rounded-full text-xs font-sans whitespace-nowrap transition-all flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#A9824B] ${
+                className={`min-h-[44px] px-4 py-2 rounded-full text-xs font-sans whitespace-nowrap transition-all flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#A9824B] ${
                   isSelected
                     ? 'bg-[#252321] text-white font-bold shadow-sm'
                     : 'bg-white border border-[#E8DFD5] text-[#4D4945] hover:text-[#252321] hover:border-[#A9824B]/40'
@@ -384,7 +395,7 @@ export default function FeaturedCollections({
                   {/* Image Container: Clean Studio Ivory Background */}
                   <div
                     className="relative aspect-[4/5] overflow-hidden bg-[#FAF7F2] cursor-pointer"
-                    onClick={() => handleOpenQuickView(jewel)}
+                    onClick={() => handleProductClick(jewel)}
                   >
                     {/* Primary Image: Model Wearing the Jewelry with Fallback */}
                     <JewelryImage
@@ -450,27 +461,27 @@ export default function FeaturedCollections({
                   </div>
 
                   {/* Card Body */}
-                  <div className="p-3 sm:p-4">
+                  <div className="p-2.5 sm:p-4">
                     {/* Category & Subtype */}
                     <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#8A837C] font-sans mb-1 uppercase tracking-wider">
                       <span className="truncate">{jewel.subCategory || jewel.category}</span>
-                      <div className="flex items-center gap-1 text-[#A9824B] shrink-0 font-sans font-medium">
+                      <div className="hidden sm:flex items-center gap-1 text-[#A9824B] shrink-0 font-sans font-medium">
                         <Star className="w-3 h-3 fill-[#A9824B]" />
                         <span className="font-bold text-[#252321]">{jewel.rating || 4.8}</span>
                       </div>
                     </div>
 
                     <h3 
-                      onClick={() => handleOpenQuickView(jewel)}
-                      className="text-xs sm:text-base font-serif text-[#252321] group-hover:text-[#8F6C3A] transition-colors mb-1 cursor-pointer line-clamp-2 sm:line-clamp-1 leading-snug font-medium"
+                      onClick={() => handleProductClick(jewel)}
+                      className="text-xs sm:text-base font-serif text-[#252321] group-hover:text-[#8F6C3A] transition-colors mb-1 cursor-pointer line-clamp-1 leading-snug font-medium"
                     >
                       {jewel.title}
                     </h3>
 
-                    {/* Outfit Match Tags */}
+                    {/* Outfit Match Tags (Visible on Tablet/Desktop) */}
                     {jewel.outfitMatch && jewel.outfitMatch.length > 0 && (
-                      <div className="flex items-center gap-1 mb-2 text-[9px] sm:text-[10px] font-sans text-[#68625D]">
-                        <span className="text-[#8A837C] hidden sm:inline">Matches:</span>
+                      <div className="hidden sm:flex items-center gap-1 mb-2 text-[9px] sm:text-[10px] font-sans text-[#68625D]">
+                        <span className="text-[#8A837C]">Matches:</span>
                         <div className="flex flex-wrap gap-1">
                           {jewel.outfitMatch.slice(0, 2).map((c) => (
                             <span key={c} className="bg-[#FAF7F2] px-1.5 py-0.5 rounded border border-[#E8DFD5] text-[#383532]">
@@ -484,10 +495,10 @@ export default function FeaturedCollections({
                 </div>
 
                 {/* Card Footer: Price & Accessible Touch-Compliant CTA */}
-                <div className="p-3 sm:p-4 pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
+                <div className="p-2.5 sm:p-4 pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
                   <div>
                     <div className="flex items-baseline gap-1.5 sm:gap-2">
-                      <span className="text-base sm:text-lg font-bold font-sans text-[#252321]">
+                      <span className="text-sm sm:text-lg font-bold font-sans text-[#252321]">
                         ₹{jewel.price}
                       </span>
                       {jewel.mrp && (
@@ -497,7 +508,7 @@ export default function FeaturedCollections({
                       )}
                     </div>
                     {jewel.mrp && (
-                      <span className="text-[9px] sm:text-[10px] text-emerald-700 font-medium font-sans block">
+                      <span className="hidden sm:block text-[9px] sm:text-[10px] text-emerald-700 font-medium font-sans">
                         Save ₹{jewel.mrp - jewel.price}
                       </span>
                     )}
@@ -507,7 +518,7 @@ export default function FeaturedCollections({
                     {isAvailable ? (
                       <button
                         onClick={() => onAddToCart(jewel)}
-                        className="w-full sm:w-auto min-h-[42px] px-3.5 sm:px-4 py-2 rounded-full bg-[#252321] hover:bg-[#383532] active:scale-95 text-[#F7F2E9] font-sans font-semibold text-xs tracking-wider uppercase transition-all shadow-xs focus-visible:ring-2 focus-visible:ring-[#A9824B] flex items-center justify-center gap-1.5"
+                        className="w-full sm:w-auto min-h-[44px] px-3 sm:px-4 py-2 rounded-full bg-[#252321] hover:bg-[#383532] active:scale-95 text-[#F7F2E9] font-sans font-semibold text-xs tracking-wider uppercase transition-all shadow-xs focus-visible:ring-2 focus-visible:ring-[#A9824B] flex items-center justify-center gap-1.5"
                         aria-label={`Buy ${jewel.title}`}
                       >
                         <ShoppingBag className="w-3.5 h-3.5 sm:hidden text-[#D8C4A3]" />
@@ -516,7 +527,7 @@ export default function FeaturedCollections({
                     ) : (
                       <button
                         onClick={() => alert(`We will notify you on WhatsApp as soon as "${jewel.title}" is back in stock!`)}
-                        className="w-full sm:w-auto min-h-[42px] px-3 py-2 rounded-full bg-[#FAF7F2] border border-[#E8DFD5] text-[#68625D] hover:text-[#252321] text-[11px] font-sans flex items-center justify-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-[#A9824B]"
+                        className="w-full sm:w-auto min-h-[44px] px-3 py-2 rounded-full bg-[#FAF7F2] border border-[#E8DFD5] text-[#68625D] hover:text-[#252321] text-[11px] font-sans flex items-center justify-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-[#A9824B]"
                         aria-label={`Notify me when ${jewel.title} is back in stock`}
                       >
                         <BellRing className="w-3 h-3 text-[#A9824B]" />

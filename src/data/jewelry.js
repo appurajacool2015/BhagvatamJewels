@@ -221,6 +221,99 @@ export const DEFAULT_PRODUCTS = [
     modelImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=85',
     description: 'Elaborate bridal hairline headpiece with dangling pearl clusters. Sits comfortably along the hair parting without causing headache.',
     features: ['Handcrafted Polki', 'Secure Hair Hooks', 'Zero Headache Weight', 'COD Available']
+  },
+
+  // 5. LADDU GOPAL JEWELS (Devotional Shringar)
+  {
+    id: 'bhag-10',
+    title: 'Handcrafted Laddu Gopal Mukut & Kundan Mala Set',
+    category: 'Laddu Gopal Jewels',
+    subCategory: 'Mukut & Mala',
+    style: 'Devotional & Mandir Shringar',
+    mrp: 699,
+    price: 299,
+    discount: '57% OFF',
+    rating: 4.9,
+    reviewsCount: 182,
+    badge: 'Devotional Special',
+    inStock: true,
+    stockQuantity: 25,
+    outfitMatch: ['Yellow', 'Red', 'Pink'],
+    occasion: 'Festive & Sangeet',
+    material: 'Gold Foil Brass with Micro Pearls',
+    stones: 'White Kundan & Emerald Drops',
+    closure: 'Adjustable Velvet Ribbon Tie',
+    productImage: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=85',
+    modelImage: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=85',
+    description: 'Exquisite shringar set for Laddu Gopal Ji (Size 0 to 6). Handcrafted with radiant polki stones, feather-light crown mukut, and matching pearl choker mala.',
+    features: ['Intricate Mukut & Choker Mala', 'Fits Laddu Gopal Sizes 0-6', 'Pure Devotional Craftsmanship', 'Cash on Delivery Available']
+  },
+  {
+    id: 'bhag-11',
+    title: 'Kundan Bansuri & Mor Pankh Pagdi Brooch for Thakurji',
+    category: 'Laddu Gopal Jewels',
+    subCategory: 'Bansuri & Brooch',
+    style: 'Devotional & Janmashtami',
+    mrp: 499,
+    price: 199,
+    discount: '60% OFF',
+    rating: 4.8,
+    reviewsCount: 94,
+    badge: 'Under ₹299',
+    inStock: true,
+    stockQuantity: 30,
+    outfitMatch: ['Yellow', 'Green'],
+    occasion: 'Festive & Sangeet',
+    material: 'Gold Plated Brass Alloy',
+    stones: 'Red Enamel & Encrusted Zircons',
+    closure: 'Clip & Pin',
+    productImage: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=1000&q=85',
+    modelImage: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=1000&q=85',
+    description: 'Miniature golden flute with hanging pearl latkan and peacock feather crown brooch for Thakurji deity shringar.',
+    features: ['Detailed Micro Metalwork', 'Hanging Pearl Latkan', 'Durable Tarnish-Resistant Gold Polish', 'COD Available']
+  }
+];
+
+export const HERO_BANNER_SLIDES = [
+  {
+    id: 'slide-necklace',
+    title: 'Festive Kundan Necklaces',
+    tagline: 'Everything For Just ₹299 - ₹899 ✨',
+    description: 'Top Quality Anti-Tarnish Jewellery',
+    badge: 'Trending Now',
+    targetCategory: 'Necklaces',
+    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=85',
+    ctaText: 'Explore Necklaces'
+  },
+  {
+    id: 'slide-earring',
+    title: 'Meenakari & Temple Jhumkas',
+    tagline: 'Handcrafted Festive Drops From ₹249 ✨',
+    description: 'Featherlight & Tarnish-Resistant Finish',
+    badge: 'Under ₹499',
+    targetCategory: 'Earrings',
+    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=85',
+    ctaText: 'Explore Jhumkas'
+  },
+  {
+    id: 'slide-bangles',
+    title: 'Antique Temple Kadas & Bangles',
+    tagline: 'Royal Wristwear From ₹349 ✨',
+    description: 'Matte Temple Gold & Openable Clasps',
+    badge: 'Bestseller',
+    targetCategory: 'Bangles & Kadas',
+    image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=1000&q=85',
+    ctaText: 'Explore Bangles'
+  },
+  {
+    id: 'slide-laddu-gopal',
+    title: 'Divine Laddu Gopal Jewels',
+    tagline: 'Sacred Shringar Sets From ₹199 ✨',
+    description: 'Handcrafted Mukut, Bansuri & Chhatra',
+    badge: 'Devotional Special',
+    targetCategory: 'Laddu Gopal Jewels',
+    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1000&q=85',
+    ctaText: 'Explore Laddu Gopal Jewels'
   }
 ];
 
@@ -246,6 +339,11 @@ export const DISCOVERY_CATEGORIES = [
     subTypes: ['All Bangles', 'Broad Kadas', 'Cuff Bracelets']
   },
   {
+    id: 'Laddu Gopal Jewels',
+    label: 'Laddu Gopal Jewels',
+    subTypes: ['All Shringar', 'Mukut & Mala', 'Bansuri & Brooch']
+  },
+  {
     id: 'Rings & Accessories',
     label: 'Rings & Accessories',
     subTypes: ['All Accessories', 'Finger Rings', 'Maang Tikka']
@@ -263,7 +361,7 @@ export const OUTFIT_COLORS = [
 
 export const SET_BUILDER_DATA = {
   necklaces: [
-    { id: 'n1', name: 'Royal Emerald Kundan Choker', price: 599, mrp: 1499, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80' },
+    { id: 'n1', name: 'Royal Emerald Kundan Choker', price: 549, mrp: 1399, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80' },
     { id: 'n2', name: 'Oxidised Silver Coin Choker', price: 449, mrp: 1199, img: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?auto=format&fit=crop&w=600&q=80' },
     { id: 'n3', name: 'Minimalist 18k Gold Layered Chain', price: 349, mrp: 899, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80' }
   ],
@@ -274,7 +372,7 @@ export const SET_BUILDER_DATA = {
   ],
   rings: [
     { id: 'r1', name: 'Floral Adjustable Cocktail Ring', price: 249, mrp: 699, img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80' },
-    { id: 'r2', name: 'Set of 2 Temple Kadas', price: 499, mrp: 1299, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=600&q=80' },
+    { id: 'r2', name: 'Openable Temple Kada', price: 349, mrp: 899, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=600&q=80' },
     { id: 'r3', name: 'Daily Wear Minimalist Band', price: 199, mrp: 499, img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80' }
   ]
 };

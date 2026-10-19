@@ -42,6 +42,12 @@ export default function JewelryImage({
 
   return (
     <div className={`relative w-full ${aspectRatio} overflow-hidden bg-[#EFE8DC]`}>
+      {!isLoaded && (
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-[#EFE8DC] via-[#FAF7F2] to-[#EFE8DC] bg-[length:200%_100%] animate-pulse motion-reduce:animate-none"
+          aria-hidden="true"
+        />
+      )}
       <img
         src={src}
         alt={alt}
@@ -52,7 +58,7 @@ export default function JewelryImage({
         fetchpriority={fetchPriority}
         onError={() => setHasError(true)}
         onLoad={() => setIsLoaded(true)}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
+        className={`w-full h-full object-cover transition-opacity duration-300 motion-reduce:transition-none ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className}`}
       />

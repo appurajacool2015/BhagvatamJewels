@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SET_BUILDER_DATA } from '../data/jewelry';
-import { Sparkles, ShoppingBag, Check, ShieldCheck, ArrowRight, Tag } from 'lucide-react';
+import { Sparkles, ShoppingBag, Check, ShieldCheck, ArrowRight, Tag, AlertCircle } from 'lucide-react';
 import JewelryImage from './JewelryImage';
 
 export default function StyleSetBuilder({ onAddToCart }) {
@@ -8,13 +8,15 @@ export default function StyleSetBuilder({ onAddToCart }) {
   const [selectedEarring, setSelectedEarring] = useState(SET_BUILDER_DATA.earrings[0]);
   const [selectedRing, setSelectedRing] = useState(SET_BUILDER_DATA.rings[0]);
 
-  // Combo calculation
+  // Genuine combo calculation without artificial clamping
   const totalIndividualPrice = selectedNecklace.price + selectedEarring.price + selectedRing.price;
   const totalMrp = selectedNecklace.mrp + selectedEarring.mrp + selectedRing.mrp;
   const comboDiscount = Math.round(totalIndividualPrice * 0.25); // 25% combo discount
   const finalBundlePrice = totalIndividualPrice - comboDiscount;
+  const isOverBudget = finalBundlePrice > 999;
 
   const handleAddBundleToCart = () => {
+    if (isOverBudget) return;
     const bundleItem = {
       id: `combo-${Date.now()}`,
       title: `3-Piece Festive Set: ${selectedNecklace.name} + ${selectedEarring.name} + ${selectedRing.name}`,
@@ -238,12 +240,28 @@ export default function StyleSetBuilder({ onAddToCart }) {
               </div>
             </div>
 
+            {/* Over-Budget Rejection Warning */}
+            {isOverBudget && (
+              <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-sans mb-3 flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <span>This set totals ₹{finalBundlePrice}, which exceeds our ₹999 festive ceiling. Please pick an alternative piece or smaller accessory to qualify for the combo deal.</span>
+              </div>
+            )}
+
             {/* Buy Combo Button */}
             <button
               onClick={handleAddBundleToCart}
-              className="w-full min-h-[48px] py-3.5 px-4 rounded-full bg-[#252321] hover:bg-[#3D3A37] text-white font-sans font-bold text-xs tracking-wider uppercase shadow-md transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none active:scale-[0.98]"
+              disabled={isOverBudget}
+              aria-disabled={isOverBudget}
+              className={`w-full min-h-[48px] py-3.5 px-4 rounded-full font-sans font-bold text-xs tracking-wider uppercase transition-all focus-visible:ring-2 focus-visible:ring-[#A9824B] focus-visible:outline-none ${
+                isOverBudget
+                  ? 'bg-[#E8DFD5] text-[#8A837C] cursor-not-allowed shadow-none'
+                  : 'bg-[#252321] hover:bg-[#3D3A37] text-white shadow-md active:scale-[0.98]'
+              }`}
             >
-              Add 3-Piece Festive Set to Bag (₹{finalBundlePrice})
+              {isOverBudget
+                ? 'Exceeds ₹999 Limit — Select Alternative'
+                : `Add 3-Piece Festive Set to Bag (₹${finalBundlePrice})`}
             </button>
 
             <div className="flex items-center justify-center gap-2 text-[10px] text-[#68625D] mt-3 font-sans">

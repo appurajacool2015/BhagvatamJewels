@@ -13,9 +13,7 @@ export const OCCASIONS = [
 export const PRICE_RANGES = [
   { id: 'All', label: 'All Prices' },
   { id: 'under499', label: 'Under ₹499', max: 499 },
-  { id: '500to999', label: '₹500 – ₹999', min: 500, max: 999 },
-  { id: '1000to1999', label: '₹1,000 – ₹1,999', min: 1000, max: 1999 },
-  { id: 'above2000', label: '₹2,000 & Above', min: 2000 }
+  { id: '500to999', label: '₹500 – ₹999', min: 500, max: 999 }
 ];
 
 export const CATEGORIES_FILTER = [
@@ -23,6 +21,7 @@ export const CATEGORIES_FILTER = [
   { id: 'Necklaces', label: 'Necklaces & Chokers' },
   { id: 'Earrings', label: 'Earrings & Jhumkas' },
   { id: 'Bangles & Kadas', label: 'Bangles & Bracelets' },
+  { id: 'Laddu Gopal Jewels', label: 'Laddu Gopal Jewels' },
   { id: 'Rings & Accessories', label: 'Rings & Accessories' }
 ];
 
